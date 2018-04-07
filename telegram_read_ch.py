@@ -16,7 +16,11 @@ def listen_function(receiver):
 			#print('Full dump: {array}'.format(array=str(msg)))
 			
 			if msg.event == "message":
-				print(msg)
+				#print(type(msg)) ###<class 'DictObject.DictObject'>
+				#print(msg['text'])
+				#print(msg['sender']['id'])
+				if msg['sender']['id'] == '$050000007011c644f7af479d18e7ddac':
+					print(msg['text'])
 				continue 
 
 	except KeyboardInterrupt:
@@ -42,7 +46,7 @@ if __name__ == '__main__':
 	sender = Sender(host="127.0.0.1", port=8089) 
 
 	history_function(sender, '$050000007011c644f7af479d18e7ddac', int(sys.argv[1]))
-	
+
 	receiver.start()  								
 	receiver.message(listen_function(receiver))  	
 	receiver.stop()									
