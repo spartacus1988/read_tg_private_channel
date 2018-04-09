@@ -1,57 +1,170 @@
-from pytg.sender import Sender
-from pytg.receiver import Receiver
-from pytg.utils import coroutine
+								
+# from telethon import TelegramClient
+# from telethon import utils
+# from telethon import events
+# from telethon.tl.functions.messages import SearchRequest
+# from telethon.tl.types import InputMessagesFilterEmpty
 
-import json
-import sys
-
-@coroutine
-def listen_function(receiver):
-	try:
-		while True:
-		
-
-			msg = (yield)
-
-			#print('Full dump: {array}'.format(array=str(msg)))
-			
-			if msg.event == "message":
-				#print(type(msg)) ###<class 'DictObject.DictObject'>
-				#print(msg['text'])
-				#print(msg['sender']['id'])
-				if msg['sender']['id'] == '$050000007011c644f7af479d18e7ddac':
-					print(msg['text'])
-				continue 
-
-	except KeyboardInterrupt:
-		receiver.stop()
-		print("Exiting")
+# import time
 
 
-def history_function(sender, chat_id, deep_history):
-	result = sender.history(chat_id, limit=1, offset=1)
-	result = json.dumps(result, sort_keys=True, indent=4, separators=(',', ': '))
-	result = json.loads(result)
-	reverse_list = []
-	for item in result[:deep_history]:
-		reverse_list.insert(0, item['text'])
-		
-	for item in reverse_list:
-		print(item)
+
+
+
+# def extract_credentials(pathfile):
+# 	 with open(pathfile, 'r') as f:
+# 			for line in f:
+# 				api_id, api_hash = line.strip().split(':')
+# 				return api_id, api_hash
+
+# api_id, api_hash = extract_credentials('credentials.txt')
+# client = TelegramClient('session_name', api_id, api_hash, update_workers=1, spawn_read_thread=False)
+# client.start()
+
+
+
+# def history_function(chat_name, list_of_queries, min_date, limit):	
+# 	filter = InputMessagesFilterEmpty()
+# 	for query in list_of_queries:	
+# 		result = client(SearchRequest(
+# 			peer=chat_name,      		# On which chat/conversation
+# 			q=query,      				# What to search for
+# 			filter=filter,  			# Filter to use (maybe filter for media)
+# 			min_date=min_date,  		# Unix time
+# 			max_date=None,  			# Maximum date
+# 			offset_id=0,    			# ID of the message to use as offset
+# 			add_offset=0,   			# Additional offset
+# 			limit=limit,       			# How many results
+# 			max_id=0,       			# Maximum message ID
+# 			min_id=0,       			# Minimum message ID
+# 			from_id=None    			# Who must have sent the message (peer)
+# 		))
+# 		#print(result.messages[0].message)
+# 		print(result.messages)
+
+
+# # @client.on(events.NewMessage(chats=('Signal Profits')))
+# # def keywords_handler(event, keywords):
+# # 	for keyword in keywords:
+# # 	    if keyword in event.raw_text:
+# # 	    	print(event.raw_text)
+
+
+
+
+# #@client.on(events.NewMessage(outgoing=True))
+# def keywords_handler():
+# 	print("keywords_is" + 'keywords')
+# 	# for keyword in keywords:
+# 	# 	if keyword in event.raw_text:
+# 	# 		print(event.raw_text)
+		  
+
+# client.add_event_handler(keywords_handler(), event)
+# client.idle()
+
+
+# # if __name__ == '__main__':
+
+# # 	#Set param for searching
+# # 	chat_name = 'Signal Profits'
+# # 	keywords = ['buy', 'target', 'stoploss']
+# # 	now = int(time.time())
+# # 	#print(now)
+# # 	yesterday = now - 86400
+# # 	limit = 100
+
+# # 	history_function(chat_name, keywords, yesterday, limit)
+
+# # 	#keywords_handler(keywords)
+# # 	client.idle()
+
+
+	
+# 	#from telethon.tl.functions.channels import GetFullChannelRequest
+# 	#res = GetFullChannelRequest(chat_name)
+# 	#res = client(GetFullChannelRequest(chat_name))
+# 	#print(str(res))
+
+# 	# from telethon.tl.functions.channels import GetMessagesRequest
+# 	# res = client(GetMessagesRequest(chat_name))
+# 	# print(str(res))
+
+
+
+
+from telethon import TelegramClient
+from telethon import utils
+from telethon import events
+from telethon.tl.functions.messages import SearchRequest
+from telethon.tl.types import InputMessagesFilterEmpty
+
+import time
+
+
+def extract_credentials(pathfile):
+	 with open(pathfile, 'r') as f:
+			for line in f:
+				api_id, api_hash = line.strip().split(':')
+				return api_id, api_hash
+
+api_id, api_hash = extract_credentials('credentials.txt')
+client = TelegramClient('session_name', api_id, api_hash, update_workers=1, spawn_read_thread=False)
+client.start()
+
+
+def history_function(chat_name, list_of_queries, min_date, limit):	
+	filter = InputMessagesFilterEmpty()
+	for query in list_of_queries:	
+		result = client(SearchRequest(
+			peer=chat_name,      		# On which chat/conversation
+			q=query,      				# What to search for
+			filter=filter,  			# Filter to use (maybe filter for media)
+			min_date=min_date,  		# Unix time
+			max_date=None,  			# Maximum date
+			offset_id=0,    			# ID of the message to use as offset
+			add_offset=0,   			# Additional offset
+			limit=limit,       			# How many results
+			max_id=0,       			# Maximum message ID
+			min_id=0,       			# Minimum message ID
+			from_id=None    			# Who must have sent the message (peer)
+		))
+		#print(result.messages[0].message)
+		print(result.messages)
+
+
+
+
+@client.on(events.NewMessage)
+def keywords_handler(event):
+    if '12' in event.raw_text:
+    	print("ss")
+
+# @client.on(events.NewMessage(chats=('Signal Profits')))
+# def keywords_handler(event, keywords):
+# 	for keyword in keywords:
+# 	    if keyword in event.raw_text:
+# 	    	print(event.raw_text)
+
 
 
 
 if __name__ == '__main__':
-	receiver = Receiver(port=8089)  				
-	sender = Sender(host="127.0.0.1", port=8089) 
 
-	history_function(sender, '$050000007011c644f7af479d18e7ddac', int(sys.argv[1]))
+	#Set param for searching
+	chat_name = 'Signal Profits'
+	keywords = ['buy', 'target', 'stoploss']
+	now = int(time.time())
+	#print(now)
+	yesterday = now - 86400
+	limit = 100
 
-	receiver.start()  								
-	receiver.message(listen_function(receiver))  	
-	receiver.stop()									
+	history_function(chat_name, keywords, yesterday, limit)
+
+	#keywords_handler(keywords)
+	#client.idle()
+	print('main')
 
 
 
-
-
+	client.idle()
