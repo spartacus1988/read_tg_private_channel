@@ -53,7 +53,7 @@ def dump_users(client, chat_name):
 		GetParticipantsRequest(chat_name,  # Getting 7th chat participants
 						   filter=ChannelParticipantsRecent(),
 						   # List of filters https://lonamiwebs.github.io/Telethon/types/channel_participants_filter.html
-						   offset=0,  # getting info from 0th user
+						   offset=offset,  # getting info from 0th user
 						   limit=200,
 						   hash=0)  # limiting number of users in a request
 		)
