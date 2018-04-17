@@ -11,6 +11,9 @@ from telethon.utils import get_input_peer
 
 import time
 import logging
+import pandas as pd
+import os
+import csv
 
 def init_log():
 	logging.basicConfig(
@@ -42,6 +45,7 @@ def dump_users(client, chat_name):
 	offset = 0
 	#limit = 100
 	all_participants = []
+	current_user = []
 	while True:
 		# тут мы получаем пользователей
 		# всех сразу мы получить не можем для этого нам и нужен offset 
@@ -56,10 +60,20 @@ def dump_users(client, chat_name):
 		# если пользователей не осталось, т.е мы собрали всех, выходим
 		if not participants.users:
 			break
-		if counter>500:
+		if counter>5000:
 			break
-		all_participants.extend(['{} {} {} {}'.format(x.first_name, x.last_name, x.phone, x.username)
-						   for x in participants.users])
+		# all_participants.extend(['{} {} {} {}'.format(x.first_name, x.last_name, x.phone, x.username)
+		# 				   for x in participants.users])
+
+
+		for user in participants.users:
+			current_user = []
+			current_user.append(user.first_name)
+			current_user.append(user.last_name)
+			current_user.append(user.phone)
+			current_user.append(user.username)
+			all_participants.append(current_user)
+
 		users_count = len(participants.users)
 		# увеличиваем offset на то кол-во юзеров которое мы собрали
 		offset += users_count
@@ -69,8 +83,13 @@ def dump_users(client, chat_name):
 		time.sleep(0.5)
 		
 	# сохраняем в файл
-	with open('users.txt', 'w') as file:
-		file.write('\n'.join(map(str, all_participants)))
+	#with open('users.txt', 'w') as file:
+	#with open('users.csv', 'w') as csvfile:
+		#file.write('\n'.join(map(str, all_participants)))
+
+	file_name = "%s.csv" %  str(chat_name)
+	columns = ["first_name", "last_name", "phone", "username"]
+	pd.DataFrame(all_participants, columns = columns).to_csv(file_name, index = False)
 			
 
 
@@ -126,7 +145,9 @@ if __name__ == '__main__':
 
 
 
-	dump_users(client, list_of_chats[1])
+	#dump_users(client, list_of_chats[1])
+
+	dump_users(client, 'Aus NZ Jobs')
 
 
 
