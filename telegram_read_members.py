@@ -60,8 +60,8 @@ def dump_users(client, chat_name):
 		# если пользователей не осталось, т.е мы собрали всех, выходим
 		if not participants.users:
 			break
-		if counter>5000:
-			break
+		#if counter>5000:
+		#	break
 		# all_participants.extend(['{} {} {} {}'.format(x.first_name, x.last_name, x.phone, x.username)
 		# 				   for x in participants.users])
 
@@ -146,8 +146,12 @@ if __name__ == '__main__':
 
 
 	#dump_users(client, list_of_chats[1])
-
-	dump_users(client, 'Aus NZ Jobs')
+	#dump_users(client, 'Aus NZ Jobs')
+	#dump_users(client, 'IT Jobs in Australia 🇦🇺')
+	#dump_users(client, 'Jobs IT Australia - thegongzuo.com. send CVs to aucv@nextgentechinc.com')
+	#dump_users(client, 'IT jobs in Australia')
+	#dump_users(client, 'Jobs - non IT Australia')
+	dump_users(client, 'Alpha People AZ-NZ Job board- Madhu.mutyam@alpha-people.com.au')
 
 
 
